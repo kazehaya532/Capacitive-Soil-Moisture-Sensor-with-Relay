@@ -22,10 +22,10 @@ Pada fungsi `void setup()`:
 
 Fungsi `void loop()` adalah bagian utama program yang akan berjalan secara terus-menerus:
 
-1.  **Membaca Nilai Kelembapan Tanah:**
+1.  **Membaca Nilai Kelembapan Tanah**
     * `int moistureValue = analogRead(soilMoisturePin);`: Membaca nilai analog dari sensor kelembapan tanah yang terhubung ke pin `soilMoisturePin` (GPIO 27). Nilai analog ini biasanya berkisar antara 0 hingga 4095 pada mikrokontroler ESP32 (yang sering menggunakan GPIO 27 untuk ADC). Nilai yang lebih rendah menunjukkan tanah yang lebih kering, dan nilai yang lebih tinggi menunjukkan tanah yang lebih basah.
 
-2.  **Konversi Nilai ke Persentase:**
+2.  **Konversi Nilai ke Persentase**
     * `int moisturePercent = map(moistureValue, 900, 2500, 100, 0);`: Mengkonversi nilai ADC `moistureValue` menjadi persentase kelembapan (0-100%).
         * Fungsi `map()` mengambil nilai `moistureValue` dan memetakannya dari rentang input (900 hingga 2500) ke rentang output (100 hingga 0).
         * Asumsi di sini adalah:
@@ -33,10 +33,10 @@ Fungsi `void loop()` adalah bagian utama program yang akan berjalan secara terus
             * Jika `moistureValue` sekitar 2500, itu dianggap 0% lembap (tanah sangat kering).
         * Rentang 900-2500 kemungkinan ditemukan melalui kalibrasi sensor, karena nilai ini bisa bervariasi tergantung jenis sensor dan kondisi lingkungan.
 
-3.  **Menampilkan Data ke Serial Monitor:**
+3.  **Menampilkan Data ke Serial Monitor**
     * `Serial.print("Soil Moisture: "); Serial.print(moisturePercent); Serial.println("%"); Serial.println(moistureValue);`: Mencetak persentase kelembapan tanah dan nilai ADC mentah ke Serial Monitor. Ini membantu Anda memantau kondisi tanah secara real-time.
 
-4.  **Logika Pengontrolan Relay Berdasarkan Kelembapan:**
+4.  **Logika Pengontrolan Relay Berdasarkan Kelembapan**
     Bagian ini adalah inti dari sistem penyiram otomatis, menggunakan serangkaian pernyataan `if-else if` untuk menentukan tindakan berdasarkan `moisturePercent`:
 
     * `if (moisturePercent <= Treshold1)` (Jika kelembapan $\leq$ 30% - **Sangat Kering**):
@@ -61,5 +61,11 @@ Fungsi `void loop()` adalah bagian utama program yang akan berjalan secara terus
         * `digitalWrite(relayPin, LOW);`: Memastikan relay mati (pompa air/penyiram tidak aktif).
         * Ini berarti jika tanah sudah sangat basah, tidak ada penyiraman yang akan dilakukan.
 
-5.  **Penundaan Loop:**
+5.  **Penundaan Loop**
     * `delay(5000);`: Setelah setiap siklus pembacaan dan kontrol, program akan berhenti selama 5 detik sebelum mengulang `void loop()` kembali. Ini mencegah sensor dibaca dan relay dikontrol terlalu cepat, memberikan waktu bagi air untuk menyerap dan kelembapan tanah berubah.
+
+5.  **Hasil Rangkaian:**
+
+![WhatsApp Image 2025-05-23 at 09 02 17_c814242d](https://github.com/user-attachments/assets/ddc1bb11-55ac-4dfc-8918-e106180c3299)
+![WhatsApp Image 2025-05-23 at 09 02 15_bfb9e018](https://github.com/user-attachments/assets/8e7e645a-2c9a-46a6-b7fa-d1491a627783)
+
